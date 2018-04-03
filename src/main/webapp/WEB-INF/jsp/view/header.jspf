@@ -1,0 +1,17 @@
+<div class="ui menu">
+    <div class="ui container">
+        <div class="header item">
+            <i class="shopping bag icon"></i>
+            Online Bidding
+        </div>
+        <a href="<c:url value="/" />" class="item">Home</a>
+        <div class="right menu">
+            <div class="item">
+                <a href="<c:url value="/signup" />" class="ui positive button">Sign up</a>
+            </div>
+            <div class="item">
+                <a href="<c:url value="/login" />" class="ui primary button">Log in</a>
+            </div>
+        </div>
+    </div>
+</div>
