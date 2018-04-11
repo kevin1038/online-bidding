@@ -14,25 +14,25 @@
                             <a href="<c:url value="/login" />" class="ui blue button">Log in</a>
                         </div>
                     </security:authorize>
-                    <security:authorize access="isAuthenticated()">
-                            <div class="item">
+                    <security:authorize access="hasRole('USER')">
+                        <div class="item">
                             <a href="<c:url value="/sell" />" class="ui inverted blue button">Sell</a>
                         </div>
-                            <div class="ui simple dropdown item">
-                                <i class="user icon"></i>
+                        <div class="ui simple dropdown item">
+                            <i class="user icon"></i>
                             <security:authentication property="principal.username" />
-                        <i class="dropdown icon"></i>
-                        <div class="menu">
-                            <a class="item">My item</a>
-                            <div class="item">
-                                <c:url var="logoutUrl" value="/logout"/>
-                            <form action="${logoutUrl}" method="post">
-                                <input class="compact ui inverted red button" type="submit" value="Log out" />
-                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-                            </form>
+                            <i class="dropdown icon"></i>
+                            <div class="menu">
+                                <a class="item">My item</a>
+                                <div class="item">
+                                    <c:url var="logoutUrl" value="/logout"/>
+                                    <form action="${logoutUrl}" method="post">
+                                        <input class="compact ui inverted red button" type="submit" value="Log out" />
+                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                                    </form>
+                                </div>
                             </div>
-                        </div>
-                      </div>          
+                        </div>          
                     </security:authorize>
                 </div>
             </div>
