@@ -13,7 +13,7 @@
             </h4>
             <c:choose>
                 <c:when test="${fn:length(itemDatabase) > 0}">
-                    <div class="ui four cards">
+                    <div class="ui five doubling cards">
                         <c:forEach items="${itemDatabase}" var="item">
                             <a href="<c:url value="/item/${item.key}" />" class="blue card">
                                 <div class="image">
@@ -25,7 +25,7 @@
                                     </div>
                                 </div>
                                 <div class="extra content">
-                                    <span class="right floated">
+                                    <span class="right floated header">
                                         <i class="blue dollar sign icon"></i>
                                         22
                                     </span>

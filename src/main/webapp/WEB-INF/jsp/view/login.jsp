@@ -9,7 +9,8 @@
         <div class="ui container">
             <div class="ui center aligned three column grid">
                 <div class="column">
-                    <form method="POST" action="<c:url value="/login" />" class="ui form">
+                    <c:url var="loginUrl" value="/login"/>
+                    <form class="ui form" action="${loginUrl}" method="post">
                         <div class="ui blue segment">
                             <h2 class="ui header">
                                 Log in
@@ -26,10 +27,17 @@
                                     <input type="password" name="password" placeholder="Password" />
                                 </div>
                             </div>
-                            <input type="submit" value="Log in" class="ui fluid blue button" />
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                            <input type="submit" value="Log in" class="fluid ui blue button" />
                         </div>
-                        <div class="ui error message"></div>
                     </form>
+
+                    <c:if test="${param.error != null}">
+                        <div class="ui error message"><p>Login failed.</p></div>
+                    </c:if>
+                    <c:if test="${param.logout != null}">
+                        <div class="ui info message"><p>You have logged out.</p></div>
+                    </c:if>
                 </div>
             </div>
         </div>

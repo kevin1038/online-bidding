@@ -9,7 +9,8 @@
         <div class="ui container">
             <div class="ui center aligned three column grid">
                 <div class="column">
-                    <form method="POST" action="<c:url value="/signup" />" class="ui form">
+                    <c:url var="signupUrl" value="/signup"/>
+                    <form class="ui form" action="${signupUrl}" method="post">
                         <div class="ui teal segment">
                             <h2 class="ui header">
                                 Sign up
@@ -32,7 +33,7 @@
                                     <input type="password" name="confirmPassword" placeholder="Confirm password" />
                                 </div>
                             </div>
-                            <input type="submit" value="Sign up" class="ui fluid teal button" />
+                            <input type="submit" value="Sign up" class="fluid ui teal button" />
                         </div>
                         <div class="ui error message"></div>
                     </form>
