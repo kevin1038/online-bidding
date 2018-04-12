@@ -16,7 +16,7 @@
                     </security:authorize>
                     <security:authorize access="hasRole('USER')">
                         <div class="item">
-                            <a href="<c:url value="/sell" />" class="ui inverted blue button">Sell</a>
+                            <a href="<c:url value="/user/sell" />" class="ui inverted blue button">Sell</a>
                         </div>
                         <div class="ui simple dropdown item">
                             <i class="user icon"></i>

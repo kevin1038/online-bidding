@@ -1,11 +1,12 @@
 package ouhk.comps380f.model;
 
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
 
 public class Item {
 
-    private long id;
+    private long itemId;
     private String itemName;
     private String description;
     private Map<String, Photo> photos = new Hashtable<>();
@@ -15,12 +16,12 @@ public class Item {
     private String status;
     private Map<Integer, Comment> comments = new Hashtable<>();
 
-    public long getId() {
-        return id;
+    public long getItemId() {
+        return itemId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setItemId(long itemId) {
+        this.itemId = itemId;
     }
 
     public String getItemName() {
@@ -39,19 +40,35 @@ public class Item {
         this.description = description;
     }
 
-    public Map<String, Photo> getPhotos() {
-        return photos;
+    public Photo getPhoto(String name) {
+        return this.photos.get(name);
     }
 
-    public void setPhotos(Map<String, Photo> photos) {
-        this.photos = photos;
+    public Collection<Photo> getPhotos() {
+        return this.photos.values();
+    }
+
+    public void addPhoto(Photo photo) {
+        this.photos.put(photo.getName(), photo);
+    }
+
+    public int getNumberOfPhotos() {
+        return this.photos.size();
+    }
+
+    public boolean hasPhoto(String name) {
+        return this.photos.containsKey(name);
+    }
+
+    public Photo deletePhoto(String name) {
+        return this.photos.remove(name);
     }
 
     public double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

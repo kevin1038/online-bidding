@@ -45,26 +45,25 @@
 
                 <div class="eight wide column">
                     <div class ="ui blue segment">
-                        <h1 class="ui header">Item name</h1>
-                        <div class="ui red big tag label">$22</div>
+                        <h1 class="ui header"><c:out value="${item.itemName}" /></h1>
+                        <div class="ui red big tag label">$<c:out value="${item.price}" /></div>
                         <div class="ui divider"></div>
                         <p>
                             <i class="info icon"></i>
-                            description description description description description
-                            description description description description description
+                            <c:out value="${item.description}" />
                         </p>
                         <p>
                             <i class="user icon"></i>
-                            username
+                            <c:out value="${item.owner}" />
                         </p>
                     </div>
                     <div class ="ui segment">
                         <p>
-                            number of bids: 10
+                            number of bids: <c:out value="${item.bidCount}" />
                         </p>
                         <div class="item">
                             status: 
-                            <div class="ui green horizontal label">available</div>
+                            <div class="ui green horizontal label"><c:out value="${item.status}" /></div>
                         </div>
                     </div>
                 </div>

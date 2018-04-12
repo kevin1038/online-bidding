@@ -17,7 +17,8 @@
                         <c:forEach items="${itemDatabase}" var="item">
                             <a href="<c:url value="/item/${item.key}" />" class="blue card">
                                 <div class="image">
-                                    <img>
+                                    <img src="data:<c:out value="${item.value.photos.toArray()[0].mimeContentType}" />;base64,
+                                         <c:out value="${item.value.photos.toArray()[0].contents}" />">
                                 </div>
                                 <div class="content">
                                     <div class="header">
@@ -27,7 +28,7 @@
                                 <div class="extra content">
                                     <span class="right floated header">
                                         <i class="blue dollar sign icon"></i>
-                                        22
+                                        <c:out value="${item.value.price}" />
                                     </span>
                                 </div>
                             </a>
