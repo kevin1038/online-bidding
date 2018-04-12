@@ -1,9 +1,6 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="java.util.Base64"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Online Bidding</title>
         <%@ include file="semantic/semantic-css.jspf" %>
     </head>
