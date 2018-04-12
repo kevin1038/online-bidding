@@ -10,14 +10,21 @@
             <div class="ui grid">
                 <div class="eight wide column">
                     <div class ="ui segment">
-                        <div class="ui big image">
-                            <img src="https://semantic-ui.com/images/wireframe/image.png">
+                        <div class="ui shape">
+                            <div class="sides">
+                                <div class="active side">
+                                    <img src="https://semantic-ui.com/images/wireframe/image.png" class="ui big image">
+                                </div>
+                                <div class="side">
+                                    <img src="https://semantic-ui.com/images/wireframe/image.png" class="ui big image">
+                                </div>
+                            </div>
                         </div>
-                        <div class="fluid ui icon buttons">
-                            <button class="ui button">
+                        <div class="fluid ui icon direction buttons">
+                            <button class="ui button" data-animation="flip" data-direction="left">
                                 <i class="left arrow icon"></i>
                             </button>
-                            <button class="ui button">
+                            <button class="ui button" data-animation="flip" data-direction="right">
                                 <i class="right arrow icon"></i>
                             </button>
                         </div>
@@ -70,5 +77,26 @@
             </div>
         </div>
         <%@ include file="semantic/semantic-js.jspf" %>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                var $shape = $('.ui.shape'),
+                        $directionButton = $('.direction .button'),
+                        handler;
+
+                handler = {
+                    rotate: function () {
+                        var $shape = $(this).closest('.buttons').prevAll('.ui.shape').eq(0),
+                                direction = $(this).data('direction') || false,
+                                animation = $(this).data('animation') || false;
+                        if (direction && animation) {
+                            $shape.shape(animation + '.' + direction);
+                        }
+                    }
+                };
+
+                $shape.shape();
+                $directionButton.on('click', handler.rotate);
+            });
+        </script>
     </body>
 </html>
