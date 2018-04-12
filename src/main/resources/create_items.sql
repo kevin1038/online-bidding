@@ -1,26 +1,32 @@
 CREATE TABLE items (
-    item_id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
-    item_name VARCHAR(50) NOT NULL,
+    id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    name VARCHAR(255) NOT NULL,
     description VARCHAR(255) NOT NULL,
     price DECIMAL(9,2) NOT NULL,
     owner VARCHAR(50) NOT NULL,
     bid_count INTEGER DEFAULT 0,
     status VARCHAR(50) DEFAULT 'available',
-    PRIMARY KEY (item_id),
+    PRIMARY KEY (id),
     FOREIGN KEY (owner) REFERENCES users(username)
 );
 
 CREATE TABLE photos (
-    photo BLOB NOT NULL,
-    item_id INTEGER NOT NULL,
-    FOREIGN KEY (item_id) REFERENCES items(item_id)
+    id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    filename VARCHAR(255) DEFAULT NULL,
+    content_type VARCHAR(255) DEFAULT NULL,
+    content BLOB DEFAULT NULL,
+    item_id INTEGER DEFAULT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (item_id) REFERENCES items(id)
 );
 
 CREATE TABLE comments (
-    comment VARCHAR(255) NOT NULL,
-    comment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
+    content VARCHAR(255) NOT NULL,
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     user_role_id INTEGER NOT NULL,
     item_id INTEGER NOT NULL,
+    PRIMARY KEY (id),
     FOREIGN KEY (user_role_id) REFERENCES user_roles(user_role_id),
-    FOREIGN KEY (item_id) REFERENCES items(item_id)
+    FOREIGN KEY (item_id) REFERENCES items(id)
 );

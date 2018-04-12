@@ -89,7 +89,7 @@ public class ItemController {
     @RequestMapping(value = "/user/sell", method = RequestMethod.POST)
     public View sell(Form form, Principal principal) throws IOException {
         Item item = new Item();
-        item.setItemId(this.getNextTicketId());
+        item.setId(this.getNextTicketId());
         item.setItemName(form.getItemName());
         item.setDescription(form.getDescription());
         item.setPrice(form.getPrice());
@@ -107,8 +107,8 @@ public class ItemController {
                 item.addPhoto(photo);
             }
         }
-        this.itemDatabase.put(item.getItemId(), item);
-        return new RedirectView("/item/" + item.getItemId(), true);
+        this.itemDatabase.put(item.getId(), item);
+        return new RedirectView("/item/" + item.getId(), true);
     }
 
     private synchronized long getNextTicketId() {
