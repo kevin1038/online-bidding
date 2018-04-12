@@ -12,18 +12,25 @@
                     <div class ="ui segment">
                         <div class="ui shape">
                             <div class="sides">
-                                <div class="active side">
-                                    <img src="https://semantic-ui.com/images/wireframe/image.png" class="ui big image">
-                                </div>
-                                <div class="side">
-                                    <img src="https://semantic-ui.com/images/wireframe/image.png" class="ui big image">
-                                </div>
+                                <c:forEach items="${item.photos.toArray()}" var="photo" varStatus="status">
+                                    <c:choose>
+                                        <c:when test="${status.first}">
+                                            <div class="active side">
+                                                <img src="data:<c:out value="${photo.mimeContentType}" />;base64,
+                                                     <c:out value="${photo.encodedContents}" />" class="ui big image">
+                                            </div>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="side">
+                                                <img src="data:<c:out value="${photo.mimeContentType}" />;base64,
+                                                     <c:out value="${photo.encodedContents}" />" class="ui big image">
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:forEach>
                             </div>
                         </div>
                         <div class="fluid ui icon direction buttons">
-                            <button class="ui button" data-animation="flip" data-direction="left">
-                                <i class="left arrow icon"></i>
-                            </button>
                             <button class="ui button" data-animation="flip" data-direction="right">
                                 <i class="right arrow icon"></i>
                             </button>

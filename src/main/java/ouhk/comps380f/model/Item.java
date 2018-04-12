@@ -10,7 +10,7 @@ public class Item {
     private String itemName;
     private String description;
     private Map<String, Photo> photos = new Hashtable<>();
-    private double price;
+    private long price;
     private String owner;
     private long bidCount;
     private String status;
@@ -64,11 +64,11 @@ public class Item {
         return this.photos.remove(name);
     }
 
-    public double getPrice() {
+    public long getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(long price) {
         this.price = price;
     }
 

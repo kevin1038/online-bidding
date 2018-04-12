@@ -16,22 +16,22 @@
                                 Sell
                             </h2>
                             <div class="field">
-                                <form:label path="itemName">Item Name</form:label>
-                                <form:input type="text" path="itemName" placeholder="Item Name" />
+                                <form:label path="itemName">Item name</form:label>
+                                <form:input type="text" path="itemName" placeholder="Item name" required="required" />
                             </div>
                             <div class="field">
                                 <form:label path="description">Description</form:label>
-                                <form:textarea path="description" placeholder="Description" />
+                                <form:textarea path="description" placeholder="Description" required="required" />
                             </div>
                             <div class="field">
                                 <form:label path="photos">Photos</form:label>
-                                <form:input type="file" path="photos" multiple="multiple" />
+                                <form:input type="file" path="photos" multiple="multiple" required="required" />
                             </div>
                             <div class="field">
                                 <form:label path="price">Price</form:label>
-                                <form:input type="number" min="0" step="0.1" path="price" placeholder="Price" />
+                                <form:input type="number" min="1" path="price" placeholder="Price" required="required" />
                             </div>
-                            <input class="fluid ui blue button" type="submit" value="Submit Item" />
+                            <input class="fluid ui blue button" type="submit" value="Submit item" />
                         </div>
                     </form:form>
                 </div>

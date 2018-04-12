@@ -2,6 +2,7 @@ package ouhk.comps380f.controller;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Base64;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +51,15 @@ public class ItemController {
         private String itemName;
         private String description;
         private List<MultipartFile> photos;
-        private double price;
+        private long price;
+
+        public long getPrice() {
+            return price;
+        }
+
+        public void setPrice(long price) {
+            this.price = price;
+        }
 
         public String getItemName() {
             return itemName;
@@ -76,14 +85,6 @@ public class ItemController {
             this.photos = photos;
         }
 
-        public double getPrice() {
-            return price;
-        }
-
-        public void setPrice(double price) {
-            this.price = price;
-        }
-
     }
 
     @RequestMapping(value = "/user/sell", method = RequestMethod.POST)
@@ -102,6 +103,7 @@ public class ItemController {
             photo.setName(filePart.getOriginalFilename());
             photo.setMimeContentType(filePart.getContentType());
             photo.setContents(filePart.getBytes());
+            photo.setEncodedContents(Base64.getEncoder().encodeToString(filePart.getBytes()));
             if (photo.getName() != null && photo.getName().length() > 0
                     && photo.getContents() != null && photo.getContents().length > 0) {
                 item.addPhoto(photo);

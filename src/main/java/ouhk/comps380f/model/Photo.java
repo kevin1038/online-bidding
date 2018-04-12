@@ -5,6 +5,7 @@ public class Photo {
     private String name;
     private String mimeContentType;
     private byte[] contents;
+    private String encodedContents;
 
     public String getName() {
         return name;
@@ -28,6 +29,14 @@ public class Photo {
 
     public void setContents(byte[] contents) {
         this.contents = contents;
+    }
+
+    public String getEncodedContents() {
+        return encodedContents;
+    }
+
+    public void setEncodedContents(String encodedContents) {
+        this.encodedContents = encodedContents;
     }
     
 }
