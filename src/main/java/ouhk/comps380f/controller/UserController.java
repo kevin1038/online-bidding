@@ -16,5 +16,10 @@ public class UserController {
     public String signup() {
         return "signup";
     }
+    
+    @RequestMapping(value = "/admin/user", method = RequestMethod.GET)
+    public String user() {
+        return "user";
+    }
 
 }

@@ -7,6 +7,14 @@
     <body>
         <%@ include file="header.jspf" %>
         <div class="ui container">
+            <security:authorize access="hasRole('ADMIN')">
+                <div class="ui grid">
+                    <c:url var="deleteItemUrl" value="/admin/deleteItem/"/>
+                    <form action="${deleteItemUrl}" method="post">
+                        <input class="ui red bottom attached button" type="submit" value="Delete item" />
+                    </form>
+                </div>
+            </security:authorize>
             <div class="ui grid">
                 <div class="eight wide column">
                     <div class ="ui segment">
@@ -40,9 +48,13 @@
                         <div class="ui comments">
                             <h3 class="ui dividing header">Comments</h3>
                             <div class="comment">
-                                <a class="avatar">
-                                    <img src="https://semantic-ui.com/images/wireframe/image.png">
-                                </a>
+                                <security:authorize access="hasRole('ADMIN')">
+                                    <a class="avatar">
+                                        <button class="circular ui icon button">
+                                            <i class="trash alternate outline icon"></i>
+                                        </button>
+                                    </a>
+                                </security:authorize>
                                 <div class="content">
                                     <span class="author">username</span>
                                     <div class="metadata">
@@ -53,12 +65,23 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="ui divider"></div>
                         </div>
+                        <security:authorize access="hasRole('USER')">
+                            <form class="ui reply form">
+                                <div class="field">
+                                    <textarea></textarea>
+                                </div>
+                                <div class="ui blue labeled submit icon button">
+                                    <i class="icon edit"></i> Add Reply
+                                </div>
+                            </form>
+                        </security:authorize>
                     </div>
                 </div>
 
                 <div class="eight wide column">
-                    <div class ="ui blue segment">
+                    <div class ="ui blue attached segment">
                         <h1 class="ui header"><c:out value="${item.itemName}" /></h1>
                         <div class="ui red big tag label">$<c:out value="${item.price}" /></div>
                         <div class="ui divider"></div>
@@ -72,6 +95,19 @@
                         </p>
                     </div>
                     <div class ="ui segment">
+                        <security:authorize access="hasRole('USER')">
+                            <c:if test="${item.owner == username}">
+                                <div class="item">
+                                    <a href="<c:url value="/user/endbid" />" class="ui blue button">End bidding</a>
+                                </div>
+                            </c:if>
+                            <c:if test="${item.owner != username}">
+                                <div class="item">
+                                    <input type="number" min="${item.price}" value="${item.price}" path="price" placeholder="Price" required="required" />
+                                    <a href="<c:url value="/user/bid" />" class="ui blue button">Bid</a>
+                                </div>
+                            </c:if>
+                        </security:authorize>
                         <p>
                             number of bids: <c:out value="${item.bidCount}" />
                         </p>

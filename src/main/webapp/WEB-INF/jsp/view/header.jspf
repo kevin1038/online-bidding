@@ -20,10 +20,14 @@
                         </div>
                         <div class="ui simple dropdown item">
                             <i class="user icon"></i>
-                            <security:authentication property="principal.username" />
+                            <security:authentication var="username" property="principal.username" />
+                            ${username}
                             <i class="dropdown icon"></i>
                             <div class="menu">
                                 <a class="item">My item</a>
+                                <security:authorize access="hasRole('ADMIN')">
+                                    <a class="item" href="<c:url value="/admin/user" />">Manager user</a>
+                                </security:authorize>
                                 <div class="item">
                                     <c:url var="logoutUrl" value="/logout"/>
                                     <form action="${logoutUrl}" method="post">
