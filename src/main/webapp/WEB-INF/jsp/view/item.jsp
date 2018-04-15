@@ -9,10 +9,7 @@
         <div class="ui container">
             <security:authorize access="hasRole('ADMIN')">
                 <div class="ui grid">
-                    <c:url var="deleteItemUrl" value="/admin/deleteItem/"/>
-                    <form action="${deleteItemUrl}" method="post">
-                        <input class="ui red bottom attached button" type="submit" value="Delete item" />
-                    </form>
+                    <a class="ui red button" href="<c:url value="/admin/delete/${item.id}" />">Delete item</a>
                 </div>
             </security:authorize>
             <div class="ui grid">
@@ -25,13 +22,13 @@
                                         <c:when test="${status.first}">
                                             <div class="active side">
                                                 <img src="data:<c:out value="${photo.mimeContentType}" />;base64,
-                                                     <c:out value="${photo.encodedContents}" />" class="ui big image">
+                                                     <c:out value="${photo.getBase64Contents()}" />" class="ui big image">
                                             </div>
                                         </c:when>
                                         <c:otherwise>
                                             <div class="side">
                                                 <img src="data:<c:out value="${photo.mimeContentType}" />;base64,
-                                                     <c:out value="${photo.encodedContents}" />" class="ui big image">
+                                                     <c:out value="${photo.getBase64Contents()}" />" class="ui big image">
                                             </div>
                                         </c:otherwise>
                                     </c:choose>
@@ -98,13 +95,13 @@
                         <security:authorize access="hasRole('USER')">
                             <c:if test="${item.owner == username}">
                                 <div class="item">
-                                    <a href="<c:url value="/user/endbid" />" class="ui blue button">End bidding</a>
+                                    <a class="ui blue button" href="<c:url value="/user/endbid" />">End bidding</a>
                                 </div>
                             </c:if>
                             <c:if test="${item.owner != username}">
                                 <div class="item">
                                     <input type="number" min="${item.price}" value="${item.price}" path="price" placeholder="Price" required="required" />
-                                    <a href="<c:url value="/user/bid" />" class="ui blue button">Bid</a>
+                                    <a class="ui blue button" href="<c:url value="/user/bid" />">Bid</a>
                                 </div>
                             </c:if>
                         </security:authorize>

@@ -10,7 +10,7 @@
             <div class="ui center aligned three column grid">
                 <div class="column">
                     <c:url var="signupUrl" value="/signup"/>
-                    <form class="ui form" action="${signupUrl}" method="post">
+                    <form:form class="ui form" action="${signupUrl}" method="post" modelAttribute="itemUser">
                         <div class="ui teal segment">
                             <h2 class="ui header">
                                 Sign up
@@ -18,13 +18,13 @@
                             <div class="field">
                                 <div class="ui left icon input">
                                     <i class="user icon"></i>
-                                    <input type="text" name="username" placeholder="Username" />
+                                    <form:input type="text" path="username" placeholder="Username" />
                                 </div>
                             </div>
                             <div class="field">
                                 <div class="ui left icon input">
                                     <i class="lock icon"></i>
-                                    <input type="password" name="password" placeholder="Password" />
+                                    <form:input type="password" path="password" placeholder="Password" />
                                 </div>
                             </div>
                             <div class="field">
@@ -33,10 +33,12 @@
                                     <input type="password" name="confirmPassword" placeholder="Confirm password" />
                                 </div>
                             </div>
-                            <input type="submit" value="Sign up" class="fluid ui teal button" />
+                            <input class="fluid ui teal button" type="submit" value="Sign up" />
                         </div>
-                        <div class="ui error message"></div>
-                    </form>
+                    </form:form>
+                    <c:if test="${param.error != null}">
+                        <div class="ui error message"><p>Please try another username.</p></div>
+                    </c:if>
                 </div>
             </div>
         </div>

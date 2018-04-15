@@ -1,11 +1,50 @@
 package ouhk.comps380f.model;
 
-public class Photo {
+import java.io.Serializable;
+import java.util.Base64;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 
+@Entity
+public class Photo implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(name = "filename")
     private String name;
+
+    @Column(name = "content_type")
     private String mimeContentType;
+
+    @Column(name = "content")
+    @Basic(fetch = FetchType.LAZY)
+    @Lob
     private byte[] contents;
-    private String encodedContents;
+
+    @Column(name = "item_id", insertable = false, updatable = false)
+    private long itemId;
+
+    @ManyToOne
+    @JoinColumn(name = "item_id")
+    private Item item;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -30,13 +69,25 @@ public class Photo {
     public void setContents(byte[] contents) {
         this.contents = contents;
     }
-
-    public String getEncodedContents() {
-        return encodedContents;
-    }
-
-    public void setEncodedContents(String encodedContents) {
-        this.encodedContents = encodedContents;
-    }
     
+    public String getBase64Contents() {
+        return Base64.getEncoder().encodeToString(contents);
+    }
+
+    public long getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(long itemId) {
+        this.itemId = itemId;
+    }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
 }

@@ -1,4 +1,4 @@
-CREATE TABLE items (
+CREATE TABLE item (
     id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
     name VARCHAR(255) NOT NULL,
     description VARCHAR(255) NOT NULL,
@@ -10,23 +10,23 @@ CREATE TABLE items (
     FOREIGN KEY (owner) REFERENCES users(username)
 );
 
-CREATE TABLE photos (
+CREATE TABLE photo (
     id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
     filename VARCHAR(255) DEFAULT NULL,
     content_type VARCHAR(255) DEFAULT NULL,
     content BLOB DEFAULT NULL,
     item_id INTEGER DEFAULT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (item_id) REFERENCES items(id)
+    FOREIGN KEY (item_id) REFERENCES item(id)
 );
 
-CREATE TABLE comments (
+CREATE TABLE comment (
     id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
-    content VARCHAR(255) NOT NULL,
+    content VARCHAR(255) DEFAULT NULL,
     date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    user_role_id INTEGER NOT NULL,
-    item_id INTEGER NOT NULL,
+    username VARCHAR(50) DEFAULT NULL,
+    item_id INTEGER DEFAULT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (user_role_id) REFERENCES user_roles(user_role_id),
+    FOREIGN KEY (username) REFERENCES users(username),
     FOREIGN KEY (item_id) REFERENCES items(id)
 );

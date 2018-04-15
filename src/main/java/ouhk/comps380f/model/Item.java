@@ -1,20 +1,46 @@
 package ouhk.comps380f.model;
 
-import java.util.Collection;
-import java.util.Hashtable;
-import java.util.Map;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
-public class Item {
+@Entity
+public class Item implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(name = "name")
     private String itemName;
+
     private String description;
-    private Map<String, Photo> photos = new Hashtable<>();
-    private long price;
+
+    @OneToMany(mappedBy = "item", fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Photo> photos = new ArrayList<>();
+
+    private int price;
+
     private String owner;
+
+    @Column(name = "bid_count", insertable = false)
     private long bidCount;
+
+    @Column(insertable = false)
     private String status;
-    private Map<Integer, Comment> comments = new Hashtable<>();
+
+    @OneToMany(mappedBy = "item", fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     public long getId() {
         return id;
@@ -40,35 +66,24 @@ public class Item {
         this.description = description;
     }
 
-    public Photo getPhoto(String name) {
-        return this.photos.get(name);
+    public List<Photo> getPhotos() {
+        return photos;
     }
 
-    public Collection<Photo> getPhotos() {
-        return this.photos.values();
+    public void setPhotos(List<Photo> photos) {
+        this.photos = photos;
     }
 
-    public void addPhoto(Photo photo) {
-        this.photos.put(photo.getName(), photo);
+    public void deletePhoto(Photo photo) {
+        photo.setItem(null);
+        this.photos.remove(photo);
     }
 
-    public int getNumberOfPhotos() {
-        return this.photos.size();
-    }
-
-    public boolean hasPhoto(String name) {
-        return this.photos.containsKey(name);
-    }
-
-    public Photo deletePhoto(String name) {
-        return this.photos.remove(name);
-    }
-
-    public long getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(long price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
@@ -84,7 +99,7 @@ public class Item {
         return bidCount;
     }
 
-    public void setBidCount(int bidCount) {
+    public void setBidCount(long bidCount) {
         this.bidCount = bidCount;
     }
 
@@ -96,12 +111,17 @@ public class Item {
         this.status = status;
     }
 
-    public Map<Integer, Comment> getComments() {
+    public List<Comment> getComments() {
         return comments;
     }
 
-    public void setComments(Map<Integer, Comment> comments) {
+    public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+    
+    public void deleteComment(Comment comment) {
+        comment.setItem(null);
+        this.comments.remove(comment);
     }
 
 }

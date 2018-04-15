@@ -32,6 +32,9 @@
                         </div>
                     </form>
 
+                    <c:if test="${param.signup != null}">
+                        <div class="ui info message"><p>Registration success.</p></div>
+                    </c:if>
                     <c:if test="${param.error != null}">
                         <div class="ui error message"><p>Login failed.</p></div>
                     </c:if>
