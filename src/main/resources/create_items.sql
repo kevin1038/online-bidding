@@ -28,5 +28,5 @@ CREATE TABLE comment (
     item_id INTEGER DEFAULT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (username) REFERENCES users(username),
-    FOREIGN KEY (item_id) REFERENCES items(id)
+    FOREIGN KEY (item_id) REFERENCES item(id)
 );
