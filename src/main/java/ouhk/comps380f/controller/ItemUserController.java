@@ -1,7 +1,11 @@
 package ouhk.comps380f.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +16,7 @@ import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 import ouhk.comps380f.dao.ItemUserRepository;
 import ouhk.comps380f.model.ItemUser;
+import ouhk.comps380f.model.UserRole;
 
 @Controller
 public class ItemUserController {
@@ -93,6 +98,55 @@ public class ItemUserController {
                 form.getPassword(), form.getRoles()
         );
         itemUserRepo.save(user);
+        return new RedirectView("/admin/user", true);
+    }
+
+    @RequestMapping(value = "/admin/user/edit/{username}", method = RequestMethod.GET)
+    public ModelAndView edit(@PathVariable("username") String username, HttpServletRequest request) {
+        ItemUser user = itemUserRepo.findOne(username);
+        if (user == null) {
+            return new ModelAndView(new RedirectView("/admin/user", true));
+        }
+        if (!request.isUserInRole("ROLE_ADMIN")) {
+            return new ModelAndView(new RedirectView("/", true));
+        }
+
+        ModelAndView modelAndView = new ModelAndView("editUser");
+        modelAndView.addObject("user", user);
+        
+        Form itemUser = new Form();
+        itemUser.setPassword(user.getPassword());
+
+        List<String> roles = new ArrayList<>();
+        for (UserRole role : user.getRoles()) {
+            roles.add(role.getRole());
+        }
+        itemUser.setRoles(roles.toArray(new String[roles.size()]));
+        modelAndView.addObject("itemUser", itemUser);
+
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/admin/user/edit/{username}", method = RequestMethod.POST)
+    public View edit(@PathVariable("username") String username, Form form, HttpServletRequest request)
+            throws IOException {
+        ItemUser updatedUser = itemUserRepo.findOne(username);
+        if (updatedUser == null) {
+            return new RedirectView("/admin/user", true);
+        }
+        if (!request.isUserInRole("ROLE_ADMIN")) {
+            return new RedirectView("/", true);
+        }
+
+        updatedUser.setPassword(form.getPassword());
+        List<UserRole> list = new ArrayList<>();
+        for (String roles : form.getRoles()) {
+            UserRole role = new UserRole(updatedUser, roles);
+            list.add(role);
+        }
+        updatedUser.setRoles(list);
+
+        itemUserRepo.save(updatedUser);
         return new RedirectView("/admin/user", true);
     }
 

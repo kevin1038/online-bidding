@@ -38,7 +38,7 @@ public class Item implements Serializable {
     @Column(insertable = false)
     private String status;
 
-    @OneToMany(mappedBy = "item", fetch = FetchType.EAGER,
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 

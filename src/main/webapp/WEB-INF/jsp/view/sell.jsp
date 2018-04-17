@@ -29,7 +29,7 @@
                             </div>
                             <div class="field">
                                 <form:label path="price">Price</form:label>
-                                <form:input type="number" min="1" path="price" placeholder="Price" required="required" />
+                                <form:input type="number" value="1" min="1" path="price" placeholder="Price" required="required" />
                             </div>
                             <input class="fluid ui blue button" type="submit" value="Submit item" />
                         </div>

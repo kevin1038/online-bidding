@@ -18,9 +18,11 @@
                         <div class="item">
                             <a class="ui inverted blue button" href="<c:url value="/user/sell" />">Sell</a>
                         </div>
-                        <security:authorize access="hasRole('ADMIN')">
-                            <a class="item" href="<c:url value="/admin/user" />">Manager user</a>
-                        </security:authorize>
+                    </security:authorize>
+                    <security:authorize access="hasRole('ADMIN')">
+                        <a class="item" href="<c:url value="/admin/user" />">Manager user</a>
+                    </security:authorize>
+                    <security:authorize access="isAuthenticated()">
                         <div class="ui simple dropdown item">
                             <i class="user icon"></i>
                             <security:authentication var="username" property="principal.username" />
