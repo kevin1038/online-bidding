@@ -2,7 +2,6 @@ package ouhk.comps380f.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -113,7 +112,7 @@ public class ItemUserController {
 
         ModelAndView modelAndView = new ModelAndView("editUser");
         modelAndView.addObject("user", user);
-        
+
         Form itemUser = new Form();
         itemUser.setPassword(user.getPassword());
 

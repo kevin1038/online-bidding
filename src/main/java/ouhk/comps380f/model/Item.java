@@ -11,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 public class Item implements Serializable {
@@ -24,6 +26,7 @@ public class Item implements Serializable {
 
     private String description;
 
+    @Fetch(FetchMode.SELECT)
     @OneToMany(mappedBy = "item", fetch = FetchType.EAGER,
             cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Photo> photos = new ArrayList<>();
@@ -38,7 +41,8 @@ public class Item implements Serializable {
     @Column(insertable = false)
     private String status;
 
-    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY,
+    @Fetch(FetchMode.SELECT)
+    @OneToMany(mappedBy = "item", fetch = FetchType.EAGER,
             cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
@@ -72,11 +76,6 @@ public class Item implements Serializable {
 
     public void setPhotos(List<Photo> photos) {
         this.photos = photos;
-    }
-
-    public void deletePhoto(Photo photo) {
-        photo.setItem(null);
-        this.photos.remove(photo);
     }
 
     public int getPrice() {
@@ -118,7 +117,7 @@ public class Item implements Serializable {
     public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
-    
+
     public void deleteComment(Comment comment) {
         comment.setItem(null);
         this.comments.remove(comment);

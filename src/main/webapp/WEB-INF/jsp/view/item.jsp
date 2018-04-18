@@ -41,38 +41,43 @@
                             </button>
                         </div>
                     </div>
+
                     <div class ="ui segment">
                         <div class="ui comments">
                             <h3 class="ui dividing header">Comments</h3>
-                            <div class="comment">
-                                <security:authorize access="hasRole('ADMIN')">
-                                    <a class="avatar">
-                                        <button class="circular ui icon button">
-                                            <i class="trash alternate outline icon"></i>
-                                        </button>
-                                    </a>
-                                </security:authorize>
-                                <div class="content">
-                                    <span class="author">username</span>
-                                    <div class="metadata">
-                                        <span class="date">Time</span>
-                                    </div>
-                                    <div class="text">
-                                        Comment
+
+                            <c:forEach items="${item.comments.toArray()}" var="comment">
+                                <div class="comment">
+                                    <security:authorize access="hasRole('ADMIN')">
+                                        <a class="avatar" href="<c:url value="/admin/delete/${item.id}/${comment.id}" />">
+                                            <button class="circular ui icon button">
+                                                <i class="trash alternate outline icon"></i>
+                                            </button>
+                                        </a>
+                                    </security:authorize>
+                                    <div class="content">
+                                        <span class="author">${comment.username}</span>
+                                        <div class="metadata">
+                                            <span class="date">${comment.date}</span>
+                                        </div>
+                                        <div class="text">
+                                            ${comment.content}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </c:forEach>
                             <div class="ui divider"></div>
                         </div>
                         <security:authorize access="hasRole('USER')">
-                            <form class="ui reply form">
+                            <c:url var="postUrl" value="/user/post/${item.id}" />
+                            <form:form class="ui reply form" action="${postUrl}" method="POST" modelAttribute="comment">
                                 <div class="field">
-                                    <textarea></textarea>
+                                    <form:textarea path="content" required="required" />
                                 </div>
-                                <div class="ui blue labeled submit icon button">
+                                <button class="ui blue labeled icon button" type="submit">
                                     <i class="icon edit"></i> Add Reply
-                                </div>
-                            </form>
+                                </button>
+                            </form:form>
                         </security:authorize>
                     </div>
                 </div>
@@ -91,6 +96,7 @@
                             <c:out value="${item.owner}" />
                         </p>
                     </div>
+
                     <div class ="ui segment">
                         <security:authorize access="hasRole('USER')">
                             <c:if test="${item.owner == username}">

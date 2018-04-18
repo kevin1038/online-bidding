@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
+import ouhk.comps380f.exception.CommentNotFound;
 import ouhk.comps380f.exception.ItemNotFound;
 import ouhk.comps380f.model.Item;
 import ouhk.comps380f.service.ItemService;
-import ouhk.comps380f.service.PhotoService;
 
 @Controller
 public class ItemController {
@@ -22,23 +23,51 @@ public class ItemController {
     @Autowired
     private ItemService itemService;
 
-    @Autowired
-    private PhotoService photoService;
-
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index(ModelMap model) {
         model.addAttribute("itemDatabase", itemService.getItems());
         return "index";
     }
 
-    @RequestMapping(value = "/item/{itemId}", method = RequestMethod.GET)
-    public String item(@PathVariable("itemId") long itemId, ModelMap model) {
-        Item item = this.itemService.getItem(itemId);
-        if (item == null) {
-            return "redirect:/";
+    public static class CommentForm {
+
+        String content;
+
+        public String getContent() {
+            return content;
         }
-        model.addAttribute("item", item);
-        return "item";
+
+        public void setContent(String content) {
+            this.content = content;
+        }
+
+    }
+
+    @RequestMapping(value = "/item/{itemId}", method = RequestMethod.GET)
+    public ModelAndView item(@PathVariable("itemId") long itemId) {
+        Item item = itemService.getItem(itemId);
+        if (item == null) {
+            return new ModelAndView(new RedirectView("/", true));
+        }
+
+        ModelAndView modelAndView = new ModelAndView("item");
+        modelAndView.addObject("item", item);
+        modelAndView.addObject("comment", new CommentForm());
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/user/post/{itemId}", method = RequestMethod.POST)
+    public String post(@PathVariable("itemId") long itemId, CommentForm form,
+            Principal principal) throws IOException {
+        itemService.addComment(itemId, form.getContent(), principal.getName());
+        return "redirect:/item/" + itemId;
+    }
+
+    @RequestMapping(value = "/admin/delete/{itemId}/{commentId}", method = RequestMethod.GET)
+    public String delete(@PathVariable("itemId") long itemId, @PathVariable("commentId") long commentId)
+            throws CommentNotFound {
+        itemService.deleteComment(itemId, commentId);
+        return "redirect:/item/" + itemId;
     }
 
     @RequestMapping(value = "/user/sell", method = RequestMethod.GET)

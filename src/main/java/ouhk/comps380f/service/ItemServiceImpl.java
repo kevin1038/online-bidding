@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ouhk.comps380f.dao.ItemRepository;
-import ouhk.comps380f.dao.PhotoRepository;
+import ouhk.comps380f.exception.CommentNotFound;
 import ouhk.comps380f.exception.ItemNotFound;
-import ouhk.comps380f.exception.PhotoNotFound;
+import ouhk.comps380f.model.Comment;
 import ouhk.comps380f.model.Item;
 import ouhk.comps380f.model.Photo;
 
@@ -18,8 +18,6 @@ public class ItemServiceImpl implements ItemService {
 
     @Resource
     private ItemRepository itemRepo;
-    @Resource
-    private PhotoRepository photoRepo;
 
     @Override
     @Transactional
@@ -41,20 +39,6 @@ public class ItemServiceImpl implements ItemService {
             throw new ItemNotFound();
         }
         itemRepo.delete(deletedItem);
-    }
-
-    @Override
-    @Transactional(rollbackFor = PhotoNotFound.class)
-    public void deletePhoto(long itemId, String name) throws PhotoNotFound {
-        Item item = itemRepo.findOne(itemId);
-        for (Photo photo : item.getPhotos()) {
-            if (photo.getName().equals(name)) {
-                item.deletePhoto(photo);
-                itemRepo.save(item);
-                return;
-            }
-        }
-        throw new PhotoNotFound();
     }
 
     @Override
@@ -81,6 +65,32 @@ public class ItemServiceImpl implements ItemService {
         }
         Item savedItem = itemRepo.save(item);
         return savedItem.getId();
+    }
+
+    @Override
+    @Transactional
+    public void addComment(long itemId, String content, String username) {
+        Item item = itemRepo.findOne(itemId);
+        Comment comment = new Comment();
+        comment.setContent(content);
+        comment.setUsername(username);
+        comment.setItem(item);
+        item.getComments().add(comment);
+        itemRepo.save(item);
+    }
+
+    @Override
+    @Transactional(rollbackFor = CommentNotFound.class)
+    public void deleteComment(long itemId, long commentId) throws CommentNotFound {
+        Item item = itemRepo.findOne(itemId);
+        for (Comment comment : item.getComments()) {
+            if (comment.getId() == commentId) {
+                item.deleteComment(comment);
+                itemRepo.save(item);
+                return;
+            }
+        }
+        throw new CommentNotFound();
     }
 
 }

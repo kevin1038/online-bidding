@@ -1,5 +1,6 @@
 package ouhk.comps380f.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +13,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-public class Comment {
+public class Comment implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +21,7 @@ public class Comment {
 
     private String content;
 
+    @Column(insertable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
