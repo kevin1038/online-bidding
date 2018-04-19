@@ -36,7 +36,7 @@ public class Item implements Serializable {
     private String owner;
 
     @Column(name = "bid_count", insertable = false)
-    private long bidCount;
+    private int bidCount;
 
     @Column(insertable = false)
     private String status;
@@ -45,6 +45,8 @@ public class Item implements Serializable {
     @OneToMany(mappedBy = "item", fetch = FetchType.EAGER,
             cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
+    
+    private String winner;
 
     public long getId() {
         return id;
@@ -94,11 +96,11 @@ public class Item implements Serializable {
         this.owner = owner;
     }
 
-    public long getBidCount() {
+    public int getBidCount() {
         return bidCount;
     }
 
-    public void setBidCount(long bidCount) {
+    public void setBidCount(int bidCount) {
         this.bidCount = bidCount;
     }
 
@@ -121,6 +123,14 @@ public class Item implements Serializable {
     public void deleteComment(Comment comment) {
         comment.setItem(null);
         this.comments.remove(comment);
+    }
+
+    public String getWinner() {
+        return winner;
+    }
+
+    public void setWinner(String winner) {
+        this.winner = winner;
     }
 
 }

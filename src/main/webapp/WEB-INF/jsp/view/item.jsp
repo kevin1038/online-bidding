@@ -66,7 +66,6 @@
                                     </div>
                                 </div>
                             </c:forEach>
-                            <div class="ui divider"></div>
                         </div>
                         <security:authorize access="hasRole('USER')">
                             <c:url var="postUrl" value="/user/post/${item.id}" />
@@ -99,16 +98,19 @@
 
                     <div class ="ui segment">
                         <security:authorize access="hasRole('USER')">
-                            <c:if test="${item.owner == username}">
+                            <c:if test="${item.owner == username && item.status == "available"}">
                                 <div class="item">
-                                    <a class="ui blue button" href="<c:url value="/user/endbid" />">End bidding</a>
+                                    <a class="ui blue button" href="<c:url value="/user/endbid/${item.id}" />">End bidding</a>
                                 </div>
                             </c:if>
-                            <c:if test="${item.owner != username}">
-                                <div class="item">
-                                    <input type="number" min="${item.price}" value="${item.price}" path="price" placeholder="Price" required="required" />
-                                    <a class="ui blue button" href="<c:url value="/user/bid" />">Bid</a>
-                                </div>
+                            <c:if test="${item.owner != username && item.winner != username}">
+                                <c:url var="bidUrl" value="/user/bid/${item.id}" />
+                                <form:form class="ui form" action="${bidUrl}" method="POST" enctype="multipart/form-data" modelAttribute="bid">
+                                    <div class="item">
+                                        <form:input type="number" min="${item.price+1}" value="${item.price}" path="price" placeholder="Price" required="required" />
+                                        <button class="ui blue button" type="submit">Bid</button>
+                                    </div>
+                                </form:form >
                             </c:if>
                         </security:authorize>
                         <p>

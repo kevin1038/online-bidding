@@ -22,4 +22,7 @@ public interface ItemService {
     
     public void deleteComment(long itemId, long commentId) throws CommentNotFound;
     
+    public void updateBidPrice(long itemID, int price, String bidder);
+    
+    public void endBidding(long itemID);
 }

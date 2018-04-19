@@ -93,4 +93,22 @@ public class ItemServiceImpl implements ItemService {
         throw new CommentNotFound();
     }
 
+    @Override
+    @Transactional
+    public void updateBidPrice(long itemID, int price, String bidder) {
+        Item item = itemRepo.findOne(itemID);
+        item.setPrice(price);
+        item.setWinner(bidder);
+        item.setBidCount(item.getBidCount() + 1);
+        itemRepo.save(item);
+    }
+
+    @Override
+    @Transactional
+    public void endBidding(long itemID) {
+        Item item = itemRepo.findOne(itemID);
+        item.setStatus(item.getWinner());
+        itemRepo.save(item);
+    }
+
 }

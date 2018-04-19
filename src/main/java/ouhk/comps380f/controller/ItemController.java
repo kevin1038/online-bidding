@@ -2,7 +2,9 @@ package ouhk.comps380f.controller;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -11,10 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 import ouhk.comps380f.exception.CommentNotFound;
 import ouhk.comps380f.exception.ItemNotFound;
 import ouhk.comps380f.model.Item;
+import ouhk.comps380f.model.ItemUser;
+import ouhk.comps380f.model.UserRole;
 import ouhk.comps380f.service.ItemService;
 
 @Controller
@@ -53,6 +58,7 @@ public class ItemController {
         ModelAndView modelAndView = new ModelAndView("item");
         modelAndView.addObject("item", item);
         modelAndView.addObject("comment", new CommentForm());
+        modelAndView.addObject("bid", new BidderForm());
         return modelAndView;
     }
 
@@ -73,6 +79,33 @@ public class ItemController {
     @RequestMapping(value = "/user/sell", method = RequestMethod.GET)
     public ModelAndView sell() {
         return new ModelAndView("sell", "sellForm", new Form());
+    }
+
+    public static class BidderForm {
+
+        int price;
+
+        public void setPrice(int price) {
+            this.price = price;
+        }
+
+        public int getPrice() {
+            return price;
+        }
+    }
+
+    @RequestMapping(value = "/user/bid/{itemId}", method = RequestMethod.POST)
+    public String bidding(@PathVariable("itemId") long itemID, BidderForm form, Principal principal)
+            throws IOException {
+        itemService.updateBidPrice(itemID, form.getPrice(), principal.getName());
+        return "redirect:/item/" + itemID;
+    }
+
+    @RequestMapping(value = "/user/endbid/{itemId}", method = RequestMethod.GET)
+    public String endBid(@PathVariable("itemId") long itemID, Principal principal)
+            throws IOException {
+        itemService.endBidding(itemID);
+        return "redirect:/item/" + itemID;
     }
 
     public static class Form {

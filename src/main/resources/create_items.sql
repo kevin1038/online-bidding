@@ -6,6 +6,7 @@ CREATE TABLE item (
     owner VARCHAR(50) NOT NULL,
     bid_count INTEGER DEFAULT 0,
     status VARCHAR(50) DEFAULT 'available',
+    winner VARCHAR(50) DEFAULT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (owner) REFERENCES users(username)
 );
