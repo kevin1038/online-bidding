@@ -2,9 +2,7 @@ package ouhk.comps380f.controller;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -13,13 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 import ouhk.comps380f.exception.CommentNotFound;
 import ouhk.comps380f.exception.ItemNotFound;
 import ouhk.comps380f.model.Item;
-import ouhk.comps380f.model.ItemUser;
-import ouhk.comps380f.model.UserRole;
 import ouhk.comps380f.service.ItemService;
 
 @Controller
@@ -34,6 +29,22 @@ public class ItemController {
         return "index";
     }
 
+    @RequestMapping(value = "/item/{itemId}", method = RequestMethod.GET)
+    public ModelAndView item(@PathVariable("itemId") long itemId) {
+        Item item = itemService.getItem(itemId);
+        if (item == null) {
+            return new ModelAndView(new RedirectView("/", true));
+        }
+
+        ModelAndView modelAndView = new ModelAndView("item");
+        modelAndView.addObject("item", item);
+        modelAndView.addObject("comment", new CommentForm());
+        modelAndView.addObject("bid", new BidForm());
+        modelAndView.addObject("endBid", new EndBidForm());
+
+        return modelAndView;
+    }
+
     public static class CommentForm {
 
         String content;
@@ -46,20 +57,6 @@ public class ItemController {
             this.content = content;
         }
 
-    }
-
-    @RequestMapping(value = "/item/{itemId}", method = RequestMethod.GET)
-    public ModelAndView item(@PathVariable("itemId") long itemId) {
-        Item item = itemService.getItem(itemId);
-        if (item == null) {
-            return new ModelAndView(new RedirectView("/", true));
-        }
-
-        ModelAndView modelAndView = new ModelAndView("item");
-        modelAndView.addObject("item", item);
-        modelAndView.addObject("comment", new CommentForm());
-        modelAndView.addObject("bid", new BidderForm());
-        return modelAndView;
     }
 
     @RequestMapping(value = "/user/post/{itemId}", method = RequestMethod.POST)
@@ -81,7 +78,7 @@ public class ItemController {
         return new ModelAndView("sell", "sellForm", new Form());
     }
 
-    public static class BidderForm {
+    public static class BidForm {
 
         int price;
 
@@ -95,17 +92,31 @@ public class ItemController {
     }
 
     @RequestMapping(value = "/user/bid/{itemId}", method = RequestMethod.POST)
-    public String bidding(@PathVariable("itemId") long itemID, BidderForm form, Principal principal)
+    public String bidding(@PathVariable("itemId") long itemID, BidForm form, Principal principal)
             throws IOException {
         itemService.updateBidPrice(itemID, form.getPrice(), principal.getName());
         return "redirect:/item/" + itemID;
     }
 
-    @RequestMapping(value = "/user/endbid/{itemId}", method = RequestMethod.GET)
-    public String endBid(@PathVariable("itemId") long itemID, Principal principal)
+    public static class EndBidForm {
+
+        String winner;
+
+        public String getWinner() {
+            return winner;
+        }
+
+        public void setWinner(String winner) {
+            this.winner = winner;
+        }
+
+    }
+
+    @RequestMapping(value = "/user/endbid/{itemId}", method = RequestMethod.POST)
+    public String endBid(@PathVariable("itemId") long itemId, EndBidForm form, Principal principal)
             throws IOException {
-        itemService.endBidding(itemID);
-        return "redirect:/item/" + itemID;
+        itemService.endBidding(itemId, form.getWinner());
+        return "redirect:/item/" + itemId;
     }
 
     public static class Form {

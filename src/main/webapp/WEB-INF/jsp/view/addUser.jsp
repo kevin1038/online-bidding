@@ -8,8 +8,7 @@
         <%@ include file="header.jspf" %>
         <div class="ui container">
             <h2>Create user</h2>
-            <form:form class="ui form" method="POST" enctype="multipart/form-data"
-                       modelAttribute="itemUser">
+            <form:form class="ui form" method="POST" modelAttribute="itemUser">
                 <div class="field">
                     <form:label path="username">Username</form:label>
                     <form:input type="text" path="username" />

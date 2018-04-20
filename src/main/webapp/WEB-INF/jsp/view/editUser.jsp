@@ -14,8 +14,7 @@
                     </div>
                 </div>
                 <div class="content">
-                    <form:form class="ui form" method="POST" enctype="multipart/form-data"
-                               modelAttribute="itemUser">
+                    <form:form class="ui form" method="POST" modelAttribute="itemUser">
                         <div class="field">
                             <label>Username</label>
                             ${user.username}

@@ -12,6 +12,12 @@
                     <a class="ui red button" href="<c:url value="/admin/delete/${item.id}" />">Delete item</a>
                 </div>
             </security:authorize>
+            <c:if test="${item.status != "available" && item.status != username}">
+                <h1 class="ui centered red header">This item is expired.</h1>
+            </c:if>
+            <c:if test="${item.status == username}">
+                <h1 class="ui centered blue header">You own this item.</h1>
+            </c:if>
             <div class="ui grid">
                 <div class="eight wide column">
                     <div class ="ui segment">
@@ -45,27 +51,33 @@
                     <div class ="ui segment">
                         <div class="ui comments">
                             <h3 class="ui dividing header">Comments</h3>
-
-                            <c:forEach items="${item.comments.toArray()}" var="comment">
-                                <div class="comment">
-                                    <security:authorize access="hasRole('ADMIN')">
-                                        <a class="avatar" href="<c:url value="/admin/delete/${item.id}/${comment.id}" />">
-                                            <button class="circular ui icon button">
-                                                <i class="trash alternate outline icon"></i>
-                                            </button>
-                                        </a>
-                                    </security:authorize>
-                                    <div class="content">
-                                        <span class="author">${comment.username}</span>
-                                        <div class="metadata">
-                                            <span class="date">${comment.date}</span>
+                            <c:choose>
+                                <c:when test="${fn:length(item.comments) == 0}">
+                                    <i>There are no comments.</i>
+                                </c:when>
+                                <c:otherwise>
+                                    <c:forEach items="${item.comments.toArray()}" var="comment">
+                                        <div class="comment">
+                                            <security:authorize access="hasRole('ADMIN')">
+                                                <a class="avatar" href="<c:url value="/admin/delete/${item.id}/${comment.id}" />">
+                                                    <button class="circular ui icon button">
+                                                        <i class="trash alternate outline icon"></i>
+                                                    </button>
+                                                </a>
+                                            </security:authorize>
+                                            <div class="content">
+                                                <span class="author">${comment.username}</span>
+                                                <div class="metadata">
+                                                    <span class="date">${comment.date}</span>
+                                                </div>
+                                                <div class="text">
+                                                    ${comment.content}
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="text">
-                                            ${comment.content}
-                                        </div>
-                                    </div>
-                                </div>
-                            </c:forEach>
+                                    </c:forEach>
+                                </c:otherwise>
+                            </c:choose>
                         </div>
                         <security:authorize access="hasRole('USER')">
                             <c:url var="postUrl" value="/user/post/${item.id}" />
@@ -84,7 +96,7 @@
                 <div class="eight wide column">
                     <div class ="ui blue attached segment">
                         <h1 class="ui header"><c:out value="${item.itemName}" /></h1>
-                        <div class="ui red big tag label">$<c:out value="${item.price}" /></div>
+                        <div class="ui blue big tag label">$<c:out value="${item.price}" /></div>
                         <div class="ui divider"></div>
                         <p>
                             <i class="info icon"></i>
@@ -99,13 +111,23 @@
                     <div class ="ui segment">
                         <security:authorize access="hasRole('USER')">
                             <c:if test="${item.owner == username && item.status == "available"}">
-                                <div class="item">
-                                    <a class="ui blue button" href="<c:url value="/user/endbid/${item.id}" />">End bidding</a>
-                                </div>
+                                <c:url var="endBidUrl" value="/user/endbid/${item.id}" />
+                                <form:form class="ui form" action="${endBidUrl}" method="POST" modelAttribute="endBid">
+                                    <div class="item">
+                                        <form:select class="ui dropdown" path="winner" required="required">
+                                            <form:option value="">Select a winner</form:option>
+                                            <form:option value="no winner">no winner</form:option>
+                                            <c:if test="${!empty item.winner}">
+                                                <form:option value="${item.winner}">${item.winner}</form:option>
+                                            </c:if>
+                                        </form:select>
+                                        <button class="ui blue button" type="submit">End Bidding</button>
+                                    </div>
+                                </form:form>
                             </c:if>
                             <c:if test="${item.owner != username && item.winner != username}">
                                 <c:url var="bidUrl" value="/user/bid/${item.id}" />
-                                <form:form class="ui form" action="${bidUrl}" method="POST" enctype="multipart/form-data" modelAttribute="bid">
+                                <form:form class="ui form" action="${bidUrl}" method="POST" modelAttribute="bid">
                                     <div class="item">
                                         <form:input type="number" min="${item.price+1}" value="${item.price}" path="price" placeholder="Price" required="required" />
                                         <button class="ui blue button" type="submit">Bid</button>
@@ -117,8 +139,15 @@
                             number of bids: <c:out value="${item.bidCount}" />
                         </p>
                         <div class="item">
-                            status: 
-                            <div class="ui green horizontal label"><c:out value="${item.status}" /></div>
+                            status:
+                            <c:choose>
+                                <c:when test="${item.status == "available"}">
+                                    <div class="ui green horizontal label">${item.status}</div>
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="ui teal horizontal label">${item.status}</div>
+                                </c:otherwise>
+                            </c:choose>
                         </div>
                     </div>
                 </div>

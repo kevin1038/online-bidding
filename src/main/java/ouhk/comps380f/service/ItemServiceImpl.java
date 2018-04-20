@@ -95,8 +95,8 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public void updateBidPrice(long itemID, int price, String bidder) {
-        Item item = itemRepo.findOne(itemID);
+    public void updateBidPrice(long itemId, int price, String bidder) {
+        Item item = itemRepo.findOne(itemId);
         item.setPrice(price);
         item.setWinner(bidder);
         item.setBidCount(item.getBidCount() + 1);
@@ -105,9 +105,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public void endBidding(long itemID) {
-        Item item = itemRepo.findOne(itemID);
-        item.setStatus(item.getWinner());
+    public void endBidding(long itemId, String winner) {
+        Item item = itemRepo.findOne(itemId);
+        item.setStatus(winner);
         itemRepo.save(item);
     }
 
