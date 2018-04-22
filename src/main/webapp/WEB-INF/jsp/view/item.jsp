@@ -131,15 +131,22 @@
                                 </div>
                             </c:if>
 
-                            <c:if test="${item.owner != username && item.status == "available" && item.winner != username}">
+                            <c:if test="${item.owner != username && item.status == "available"}">
                                 <div class="ui segment">
-                                    <c:url var="bidUrl" value="/user/bid/${item.id}" />
-                                    <form:form class="ui form" action="${bidUrl}" method="POST" modelAttribute="bid">
-                                        <div class="ui action input">
-                                            <form:input type="number" min="${item.price+1}" value="${item.price}" path="price" placeholder="Price" required="required" />
-                                            <button class="ui blue button" type="submit">Bid</button>
-                                        </div>
-                                    </form:form>
+                                    <c:choose>
+                                        <c:when test="${item.winner == username}">
+                                            <div class="ui blue big basic label">You are the highest bidder.</div> 
+                                        </c:when>
+                                        <c:otherwise>
+                                            <c:url var="bidUrl" value="/user/bid/${item.id}" />
+                                            <form:form class="ui form" action="${bidUrl}" method="POST" modelAttribute="bid">
+                                                <div class="ui action input">
+                                                    <form:input type="number" min="${item.price+1}" value="${item.price}" path="price" placeholder="Price" required="required" />
+                                                    <button class="ui blue button" type="submit">Bid</button>
+                                                </div>
+                                            </form:form>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </div>
                             </c:if>
                         </security:authorize>
