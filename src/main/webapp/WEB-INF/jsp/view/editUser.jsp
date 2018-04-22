@@ -9,9 +9,7 @@
         <div class="ui container">
             <div class="ui card">
                 <div class="content">
-                    <div class="header">
-                        Edit user
-                    </div>
+                    <div class="header">Edit user</div>
                 </div>
                 <div class="content">
                     <form:form class="ui form" method="POST" modelAttribute="itemUser">

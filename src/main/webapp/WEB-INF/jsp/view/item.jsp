@@ -68,7 +68,9 @@
                                             <div class="content">
                                                 <span class="author">${comment.username}</span>
                                                 <div class="metadata">
-                                                    <span class="date">${comment.date}</span>
+                                                    <span class="date">
+                                                        <fmt:formatDate value="${comment.date}" pattern="yyyy-MM-dd HH:mm:ss" />
+                                                    </span>
                                                 </div>
                                                 <div class="text">
                                                     ${comment.content}
@@ -86,7 +88,8 @@
                                     <form:textarea path="content" required="required" />
                                 </div>
                                 <button class="ui blue labeled icon button" type="submit">
-                                    <i class="icon edit"></i> Add Reply
+                                    <i class="icon edit"></i>
+                                    Reply
                                 </button>
                             </form:form>
                         </security:authorize>
@@ -108,37 +111,44 @@
                         </p>
                     </div>
 
-                    <div class ="ui segment">
+                    <div class ="ui segments">
                         <security:authorize access="hasRole('USER')">
                             <c:if test="${item.owner == username && item.status == "available"}">
-                                <c:url var="endBidUrl" value="/user/endbid/${item.id}" />
-                                <form:form class="ui form" action="${endBidUrl}" method="POST" modelAttribute="endBid">
-                                    <div class="item">
-                                        <form:select class="ui dropdown" path="winner" required="required">
-                                            <form:option value="">Select a winner</form:option>
-                                            <form:option value="no winner">no winner</form:option>
-                                            <c:if test="${!empty item.winner}">
-                                                <form:option value="${item.winner}">${item.winner}</form:option>
-                                            </c:if>
-                                        </form:select>
-                                        <button class="ui blue button" type="submit">End Bidding</button>
-                                    </div>
-                                </form:form>
+                                <div class="ui segment">
+                                    <c:url var="endBidUrl" value="/user/endbid/${item.id}" />
+                                    <form:form class="ui form" action="${endBidUrl}" method="POST" modelAttribute="endBid">
+                                        <div class="ui action input">
+                                            <form:select class="ui dropdown" path="winner" required="required">
+                                                <form:option value="">Select a winner</form:option>
+                                                <form:option value="no winner">no winner</form:option>
+                                                <c:if test="${!empty item.winner}">
+                                                    <form:option value="${item.winner}">${item.winner}</form:option>
+                                                </c:if>
+                                            </form:select>
+                                            <button class="ui blue button" type="submit">End Bidding</button>
+                                        </div>
+                                    </form:form>
+                                </div>
                             </c:if>
-                            <c:if test="${item.owner != username && item.winner != username}">
-                                <c:url var="bidUrl" value="/user/bid/${item.id}" />
-                                <form:form class="ui form" action="${bidUrl}" method="POST" modelAttribute="bid">
-                                    <div class="item">
-                                        <form:input type="number" min="${item.price+1}" value="${item.price}" path="price" placeholder="Price" required="required" />
-                                        <button class="ui blue button" type="submit">Bid</button>
-                                    </div>
-                                </form:form >
+
+                            <c:if test="${item.owner != username && item.status == "available" && item.winner != username}">
+                                <div class="ui segment">
+                                    <c:url var="bidUrl" value="/user/bid/${item.id}" />
+                                    <form:form class="ui form" action="${bidUrl}" method="POST" modelAttribute="bid">
+                                        <div class="ui action input">
+                                            <form:input type="number" min="${item.price+1}" value="${item.price}" path="price" placeholder="Price" required="required" />
+                                            <button class="ui blue button" type="submit">Bid</button>
+                                        </div>
+                                    </form:form>
+                                </div>
                             </c:if>
                         </security:authorize>
-                        <p>
-                            number of bids: <c:out value="${item.bidCount}" />
-                        </p>
-                        <div class="item">
+
+                        <div class="ui segment">
+                            number of bids:
+                            <c:out value="${item.bidCount}" />
+                        </div>
+                        <div class="ui segment">
                             status:
                             <c:choose>
                                 <c:when test="${item.status == "available"}">
