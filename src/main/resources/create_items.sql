@@ -7,8 +7,7 @@ CREATE TABLE item (
     bid_count INTEGER DEFAULT 0,
     status VARCHAR(50) DEFAULT 'available',
     winner VARCHAR(50) DEFAULT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (owner) REFERENCES users(username)
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE photo (
@@ -28,6 +27,5 @@ CREATE TABLE comment (
     username VARCHAR(50) DEFAULT NULL,
     item_id INTEGER DEFAULT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (username) REFERENCES users(username),
     FOREIGN KEY (item_id) REFERENCES item(id)
 );
